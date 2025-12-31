@@ -145,12 +145,6 @@ Recommended for development. Allows you to use Zettel-Memory in another project 
 pip install -e /path/to/project-zettel-memory
 ```
 
-### 3. Deploy to PyPI
-
-```bash
-twine upload dist/*
-```
-
 ## License
 
 MIT License. Created by Arthur & Gemini.

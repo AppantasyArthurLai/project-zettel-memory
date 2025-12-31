@@ -148,12 +148,6 @@ python -m build
 pip install -e /path/to/project-zettel-memory
 ```
 
-### 3. 發布至 PyPI
-
-```bash
-twine upload dist/*
-```
-
 ## 授權 (License)
 
 MIT License. Created by Arthur & Gemini.
