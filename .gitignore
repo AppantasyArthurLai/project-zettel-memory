@@ -1,0 +1,40 @@
+# General
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.DS_Store
+
+# Internal Documentation
+GEMINI.md
+# Internal Documentation
+GEMINI.md
+development_plan.md
+docs/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+
+# Data & Runtime
+brain_data/
+test_brain_data*/
+
+# Build & Distribution
+dist/
+build/
+*.egg-info/
