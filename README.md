@@ -22,17 +22,23 @@
 
 ### Steps
 
-1. **Clone and Install**
+1. **Install from PyPI** (Recommended)
 
    ```bash
-   git clone https://github.com/your-username/project-zettel-memory.git
+   pip install zettel-memory
+   ```
+
+2. **Or Clone and Install** (For development)
+
+   ```bash
+   git clone https://github.com/AppantasyArthurLai/project-zettel-memory.git
    cd project-zettel-memory
    python3 -m venv .venv
    source .venv/bin/activate
    pip install .
    ```
 
-2. **Configuration**
+3. **Configuration**
    Create a `.env` file in the root directory:
    ```bash
    GOOGLE_API_KEY=your_gemini_api_key_here

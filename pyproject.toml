@@ -32,9 +32,9 @@ dependencies = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/your-username/project-zettel-memory"
-"Repository" = "https://github.com/your-username/project-zettel-memory"
-"Bug Tracker" = "https://github.com/your-username/project-zettel-memory/issues"
+"Homepage" = "https://github.com/AppantasyArthurLai/project-zettel-memory"
+"Repository" = "https://github.com/AppantasyArthurLai/project-zettel-memory"
+"Bug Tracker" = "https://github.com/AppantasyArthurLai/project-zettel-memory/issues"
 
 [project.optional-dependencies]
 dev = [
