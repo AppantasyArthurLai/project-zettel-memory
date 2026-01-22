@@ -50,3 +50,8 @@ class NetworkXStorage:
         path = self.persist_path.replace(".gml", ".graphml")
         if os.path.exists(path):
             self.graph = nx.read_graphml(path)
+
+    def clear(self):
+        """Clear the entire graph."""
+        self.graph.clear()
+        self.save()
