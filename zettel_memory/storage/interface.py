@@ -22,3 +22,8 @@ class StorageInterface(ABC):
     def delete(self, note_id: str) -> None:
         """Delete a note by ID."""
         pass
+
+    @abstractmethod
+    def clear(self) -> None:
+        """Clear all notes."""
+        pass

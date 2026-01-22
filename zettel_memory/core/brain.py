@@ -9,6 +9,7 @@ from zettel_memory.storage.chroma_storage import ChromaStorage
 from zettel_memory.storage.graph_storage import NetworkXStorage
 from zettel_memory.utils.prompts import AUTO_LINKING_PROMPT
 from zettel_memory.utils.atomicity_prompts import ATOMIZATION_PROMPT
+from zettel_memory.utils.forget_prompts import SEMANTIC_FORGET_PROMPT
 import json
 from datetime import datetime
 
@@ -124,6 +125,74 @@ class ZettelBrain:
                 asyncio.create_task(self.dreamer.compact(notes_to_process))
         
         return new_ids
+
+    def delete_memory(self, note_id: str) -> None:
+        """
+        Delete a specific memory by ID.
+        Removes from both VectorDB and Graph.
+        """
+        self.storage.delete(note_id)
+        self.graph.remove_node(note_id)
+
+    def clear_all_memories(self) -> None:
+        """
+        wipe the brain clean.
+        Clears both VectorDB and Graph.
+        """
+        self.storage.clear()
+        self.graph.clear()
+
+
+
+    async def forget_by_query(self, query: str) -> List[str]:
+        """
+        Semantically forget memories based on a natural language query.
+        1. Search for candidates.
+        2. Ask LLM to confirm which ones to delete.
+        3. Execute deletion.
+        """
+        # 1. Retrieve candidates (broad search)
+        candidates = await self.retrieve(query, top_k=10, return_objects=True, update_stats=False)
+        
+        if not candidates:
+            return []
+
+        # 2. Format for LLM
+        candidates_text = "\n".join([f"- ID: {n.id}, Content: {n.content}" for n in candidates])
+        
+        prompt = SEMANTIC_FORGET_PROMPT.format(
+            query=query,
+            candidates_list=candidates_text
+        )
+
+        try:
+            response = await self.client.aio.models.generate_content(
+                model=self.model_name,
+                contents=prompt
+            )
+            text = response.text.replace("```json", "").replace("```", "").strip()
+            result = json.loads(text)
+            
+            ids_to_delete = result.get("notes_to_delete", [])
+            
+            deleted_contents = []
+            
+            # 3. Execute Deletion
+            for note_id in ids_to_delete:
+                # Find the note object to get content for reporting
+                note = next((n for n in candidates if n.id == note_id), None)
+                if note:
+                    deleted_contents.append(note.content)
+                    self.delete_memory(note_id)
+            
+            if deleted_contents:
+                print(f"Forget intent: '{query}' -> Deleted {len(deleted_contents)} memories.")
+                
+            return deleted_contents
+
+        except Exception as e:
+            print(f"Semantic forgetting failed: {e}")
+            return []
 
     async def _auto_link(self, new_note: Note):
         """

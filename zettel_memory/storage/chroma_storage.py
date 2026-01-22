@@ -115,3 +115,7 @@ class ChromaStorage(StorageInterface):
 
     def delete(self, note_id: str) -> None:
         self.collection.delete(ids=[note_id])
+        
+    def clear(self) -> None:
+        self.client.delete_collection("zettel_memory")
+        self.collection = self.client.get_or_create_collection(name="zettel_memory")
