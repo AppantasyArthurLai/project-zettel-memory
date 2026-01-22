@@ -118,6 +118,15 @@ def get_user_brain(user_id: str) -> ZettelBrain:
 | **Graph**        | 知識圖譜與連結                   | NetworkX            |
 | **Cortex**       | 背景智慧 (做夢/遺忘/浮現)        | Background Tasks    |
 
+### 技術實作細節 (Technical Implementation Details)
+
+- **Embedding Model**: 我們預設使用 **Google Gemini `text-embedding-004`**。
+  - _原因_: 相比於 Chroma 預設的本地模型 (`all-MiniLM`)，Gemini 對於多語言與複雜語意的理解能力更強。
+  - _代價_: 這會產生少許 API 費用與網路延遲。
+- **圖譜持久化 (Graph Persistence)**:
+  - NetworkX 雖然在記憶體中運算，但所有的變更 (Add Node/Edge) 都會**即時**寫入硬碟 (`graph.graphml`)。
+  - 即使程式重啟，圖譜結構也不會消失。但在高併發 (High Concurrency) 寫入時需注意檔案鎖定問題。
+
 ## 開發與測試 (Development)
 
 執行測試套件以驗證安裝是否正確：

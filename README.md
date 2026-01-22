@@ -115,6 +115,13 @@ def get_user_brain(user_id: str) -> ZettelBrain:
 | **Graph**       | Knowledge Graph & Links                          | NetworkX         |
 | **Cortex**      | Background Intelligence (Dream/Forget/Resurface) | Background Tasks |
 
+### Technical Implementation Details
+
+- **Embedding Model**: We use **Google Gemini `text-embedding-004`** by default.
+  - _Why?_ Better semantic understanding for complex queries compared to local models (e.g., all-MiniLM).
+  - _Note_: This incurs a small API cost and latency.
+- **Graph Persistence**: While NetworkX operates in-memory, the graph state is **automatically saved to disk** (`graph.graphml`) after every modification (`add_node` / `add_edge`). It is ACID-compliant enough for single-user file locking but not for concurrent writes.
+
 ## Development & Testing
 
 Run the test suite to verify the installation:
